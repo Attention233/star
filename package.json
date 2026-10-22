@@ -1,0 +1,11 @@
+{
+  "name": "star-shop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "STAr 购物网站（纯静态 Vue 3 单页）",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "deploy": "deno -Ar https://host.retiehe.com/cli deploy"
+  }
+}

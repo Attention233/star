@@ -1,0 +1,157 @@
+/* ============================================================
+   motion.css — 关键帧 / 页面过渡 / Vue Transition / AOS 适配
+   依赖：js/vendor/{aos.css,anime.min.js,lenis.min.js}
+   ============================================================ */
+
+/* ---------- 基础关键帧 ---------- */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(60px, 40px, 0) scale(1.12); }
+}
+
+@keyframes drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50% { transform: translate3d(-70px, 50px, 0) scale(0.95); }
+}
+
+@keyframes drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(40px, -60px, 0) scale(1.15); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.08); }
+}
+
+@keyframes marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.5) rotate(-8deg); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- 页面进场（首屏淡入上浮） ---------- */
+body {
+  opacity: 1;
+}
+body.page-leaving {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 260ms var(--ease-out), transform 260ms var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  body.page-leaving { opacity: 1; transform: none; }
+}
+
+/* ---------- 通用入场兜底 ----------
+   未启用 AOS 时（脚本异常 / 减少动效），保证内容始终可见 */
+html:not(.js-aos) [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* AOS 微调：让位移更柔和 */
+[data-aos] { will-change: transform, opacity; }
+[data-aos^="fade"][data-aos^="fade"] { transition-timing-function: var(--ease-out) !important; }
+
+/* ---------- Lenis 平滑滚动 ---------- */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ---------- 加入购物车飞行元素 ---------- */
+.fly-clone {
+  position: fixed;
+  z-index: var(--z-modal);
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  pointer-events: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  will-change: transform, opacity;
+}
+
+/* ---------- 图片加载占位 ---------- */
+.img-fade { opacity: 0; transition: opacity 620ms var(--ease-out); }
+.img-fade.is-loaded { opacity: 1; }
+
+/* ============================================================
+   Vue Transition
+   ============================================================ */
+
+/* -- Fade -- */
+.fade-enter-active, .fade-leave-active { transition: opacity 0.3s var(--ease-out); }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
+
+/* -- 购物车侧滑 -- */
+.cart-slide-enter-active, .cart-slide-leave-active { transition: transform 0.42s var(--ease-out); }
+.cart-slide-enter-from, .cart-slide-leave-to { transform: translate3d(100%, 0, 0); }
+
+/* -- 移动端导航 -- */
+.nav-slide-enter-active, .nav-slide-leave-active { transition: transform 0.34s var(--ease-out), opacity 0.24s var(--ease-out); }
+.nav-slide-enter-from, .nav-slide-leave-to { transform: translateY(-14px); opacity: 0; }
+
+/* -- Toast -- */
+.toast-enter-active { transition: transform 0.42s var(--ease-out), opacity 0.42s var(--ease-out); }
+.toast-leave-active { transition: transform 0.26s ease-in, opacity 0.2s ease-in; position: absolute; right: 0; width: 100%; }
+.toast-enter-from, .toast-leave-to { transform: translateX(115%); opacity: 0; }
+.toast-move { transition: transform 0.32s var(--ease-out); }
+
+/* -- 购物车条目 -- */
+.cart-item-enter-active { transition: opacity 0.3s ease, transform 0.36s var(--ease-out); }
+.cart-item-leave-active { transition: opacity 0.24s ease-in, transform 0.24s ease-in; position: absolute; width: 100%; }
+.cart-item-enter-from { opacity: 0; transform: translateX(24px); }
+.cart-item-leave-to { opacity: 0; transform: translateX(-24px); }
+.cart-item-move { transition: transform 0.28s var(--ease-out); }
+
+/* -- 购物车角标 -- */
+.count-pop-enter-active { transition: all 0.3s var(--ease-spring); }
+.count-pop-leave-active { transition: all 0.14s ease-in; }
+.count-pop-enter-from, .count-pop-leave-to { transform: scale(0); opacity: 0; }
+
+/* -- 产品卡片列表（筛选/排序切换） -- */
+.product-list-enter-active { transition: opacity 0.42s var(--ease-out), transform 0.42s var(--ease-out); }
+.product-list-leave-active { transition: opacity 0.2s ease-in, transform 0.2s ease-in; position: absolute; width: 100%; }
+.product-list-enter-from { opacity: 0; transform: translateY(24px) scale(0.97); }
+.product-list-leave-to { opacity: 0; transform: scale(0.96); }
+.product-list-move { transition: transform 0.45s var(--ease-out); }
+
+/* -- 画廊主图切换 -- */
+.gallery-enter-active, .gallery-leave-active { transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out); }
+.gallery-enter-from { opacity: 0; transform: scale(1.03); }
+.gallery-leave-to { opacity: 0; transform: scale(0.99); position: absolute; inset: 0; }
+
+/* -- Tab 内容 -- */
+.tab-fade-enter-active { transition: opacity 0.34s var(--ease-out), transform 0.34s var(--ease-out); }
+.tab-fade-leave-active { transition: opacity 0.16s ease-in; position: absolute; width: 100%; }
+.tab-fade-enter-from { opacity: 0; transform: translateY(12px); }
+.tab-fade-leave-to { opacity: 0; }
+
+/* -- FAQ 展开 -- */
+.faq-expand-enter-active, .faq-expand-leave-active { transition: height 0.36s var(--ease-out), opacity 0.28s var(--ease-out); overflow: hidden; }
+.faq-expand-enter-from, .faq-expand-leave-to { height: 0; opacity: 0; }
+
+/* -- 弹层 -- */
+.pop-enter-active { transition: opacity 0.3s var(--ease-out), transform 0.36s var(--ease-spring); }
+.pop-leave-active { transition: opacity 0.18s ease-in, transform 0.18s ease-in; }
+.pop-enter-from, .pop-leave-to { opacity: 0; transform: scale(0.94) translateY(10px); }

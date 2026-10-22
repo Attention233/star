@@ -1,0 +1,21 @@
+# 依赖与构建产物
+node_modules/
+dist/
+
+# 部署密钥（切勿提交）
+.env
+.env.*
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.preview/
+assets/_originals/
+
+# 智能体工作目录（含内部笔记，切勿提交）
+.workbuddy/
+
+# 交付给用户的配置文件压缩包
+deploy-config.zip

@@ -1,0 +1,14 @@
+/* ============================================================
+   style.css — 样式入口（按顺序导入各层，勿在此写业务样式）
+   1. vendor  AOS 库样式
+   2. base    变量 / 重置 / 排版 / 工具类
+   3. components 导航 / 按钮 / 卡片 / 购物车 / 页脚
+   4. layout  页面级布局
+   5. motion  动效与过渡
+   ============================================================ */
+
+@import url('./vendor/aos.css');
+@import url('./base.css');
+@import url('./components.css');
+@import url('./layout.css');
+@import url('./motion.css');
