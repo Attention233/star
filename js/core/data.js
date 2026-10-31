@@ -513,4 +513,48 @@
       { label: '地址', value: '测试数据' }
     ]
   };
+  /* ---------- 支付结算（测试数据） ---------- */
+  S.payment = {
+    expireMinutes: 15,
+    address: {
+      name: '测试数据',
+      phone: '测试数据',
+      region: '测试数据：此处为收货地址占位，正式上线前请替换',
+      tag: '默认'
+    },
+    methods: [
+      {
+        id: 'wechat',
+        name: '微信支付',
+        icon: '微',
+        color: '#09bb07',
+        tip: '请使用微信「扫一扫」扫描二维码完成支付',
+        recommend: true
+      },
+      {
+        id: 'alipay',
+        name: '支付宝',
+        icon: '支',
+        color: '#1677ff',
+        tip: '请使用支付宝「扫一扫」扫描二维码完成支付',
+        recommend: false
+      },
+      {
+        id: 'unionpay',
+        name: '云闪付',
+        icon: '闪',
+        color: '#e30019',
+        tip: '请使用云闪付 App 扫描二维码完成支付',
+        recommend: false
+      }
+    ],
+    /* 二维码内容为占位串，真实环境应替换为支付网关返回的收款码内容 */
+    qrPayload(orderNo, methodId, amount) {
+      return 'STAR://pay/demo?order=' + orderNo + '&method=' + methodId + '&amount=' + amount + '&note=test-data';
+    },
+    /* 购物车为空时的兜底示例订单 */
+    sampleOrder: [
+      { id: 'p-z1-ultra-14', name: 'Z1 Ultra 14 英寸便携屏', price: 699, qty: 1, icon: '🖥️', note: '测试数据' }
+    ]
+  };
 })(window.STAr);

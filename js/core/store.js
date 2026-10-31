@@ -142,8 +142,7 @@
         S.toast.show('warning', '购物车为空', '请先添加商品再结算~', 2400);
         return;
       }
-      S.toast.show('success', '进入结算流程',
-        '共 ' + S.cart.totalItems.value + ' 件商品，合计 ' + S.formatPrice(S.cart.subtotal.value), 2800);
+      window.location.href = S.url('pages/checkout.html');
     }
   };
 })(window.STAr);

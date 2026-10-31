@@ -145,6 +145,7 @@
         cart: S.cart,
         fmt: S.formatPrice,
         isImg: S.isImageSrc,
+        resolveAsset: S.resolveAsset,
         changeQty: (id, d) => S.actions.changeQty(id, d),
         checkout: () => S.actions.checkout()
       };
@@ -176,7 +177,7 @@
             <TransitionGroup name="cart-item" tag="div" v-else>
               <div class="cart-item" v-for="item in cart.state.items" :key="item.id">
                 <div class="cart-item-image">
-                  <img v-if="isImg(item.icon)" :src="item.icon" :alt="item.name">
+                  <img v-if="isImg(item.icon)" :src="resolveAsset(item.icon)" :alt="item.name">
                   <span v-else aria-hidden="true">{{ item.icon }}</span>
                 </div>
                 <div class="cart-item-info">

@@ -47,6 +47,18 @@ window.STAr = window.STAr || {};
     return typeof s === 'string' && /\.(png|jpe?g|webp|gif|svg|avif)(\?|#|$)/i.test(s);
   };
 
+  /**
+   * 把商品图标规范化到当前页面可用的路径：
+   * 购物车 localStorage 里的图标可能是在其他层级页面加入的（'assets/...' 或 '../assets/...'），
+   * 渲染时统一去掉层级前缀，再用当前页的 S.url 重新解析，避免跨页 404。
+   */
+  S.resolveAsset = function (s) {
+    if (!S.isImageSrc(s)) return s;
+    if (/^(https?:|data:|\/)/.test(s)) return s;
+    const clean = String(s).replace(/^(\.\.\/)+/, '').replace(/^\.\//, '');
+    return S.url(clean);
+  };
+
   /** 角标文案 */
   S.tagLabel = function (tag) {
     return { new: '新品', sale: '限时优惠', hot: '热销' }[tag] || tag || '';
