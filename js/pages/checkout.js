@@ -33,6 +33,9 @@
       /* ---------- 支付方式 ---------- */
       const activeId = ref(pay.methods[0].id);
       const method = computed(() => pay.methods.find(m => m.id === activeId.value));
+      const methodDesc = m => '使用' + ({
+        wechat: '微信', alipay: '支付宝', unionpay: '云闪付'
+      }[m.id] || m.name) + '扫码付款';
 
       /* ---------- 二维码 ---------- */
       const qrBox = ref(null);
@@ -144,7 +147,7 @@
       return {
         pay, orderNo, isImg, resolveAsset,
         isDemo, items, subtotal, shipping, total, totalText,
-        activeId, method, selectMethod,
+        activeId, method, methodDesc, selectMethod,
         qrBox, remain, expired, countdownText, urgent, refreshQr,
         paid, successCard, simulatePay,
         url: S.url
@@ -155,20 +158,27 @@
       <div>
         <site-nav></site-nav>
 
-        <main class="checkout-page">
-          <div class="container">
+        <main class="checkout-page checkout-page--v2">
+          <div class="container checkout-container">
 
             <ol class="checkout-steps" data-aos="fade-up">
-              <li>购物车</li>
-              <li class="is-current">确认订单并支付</li>
-              <li>完成</li>
+              <li><span class="checkout-step-no">1</span>购物车</li>
+              <li class="is-current"><span class="checkout-step-no">2</span>确认订单并支付</li>
+              <li><span class="checkout-step-no">3</span>完成</li>
             </ol>
 
-            <div class="checkout-layout">
-              <!-- 左：订单信息 -->
+            <div class="checkout-stack">
+              <!-- 顶部：订单摘要 -->
               <section class="card checkout-order" data-aos="fade-up" data-aos-delay="60">
-                <h2 class="checkout-h">订单信息</h2>
+                <div class="order-overview-head">
+                  <div>
+                    <p class="checkout-eyebrow">ORDER SUMMARY</p>
+                    <h1 class="checkout-h">确认订单</h1>
+                  </div>
+                  <span class="order-count">共 {{ items.length }} 件商品</span>
+                </div>
 
+                <div class="order-overview-body">
                 <div class="order-address">
                   <div class="order-address-badge">{{ pay.address.tag }}</div>
                   <div>
@@ -186,8 +196,10 @@
                       <img v-if="isImg(it.icon)" :src="resolveAsset(it.icon)" :alt="it.name">
                       <span v-else>{{ it.icon }}</span>
                     </span>
-                    <span class="order-item-name">{{ it.name }}</span>
-                    <span class="order-item-qty">×{{ it.qty }}</span>
+                    <span class="order-item-info">
+                      <span class="order-item-name">{{ it.name }}</span>
+                      <span class="order-item-qty">数量 ×{{ it.qty }}</span>
+                    </span>
                     <span class="order-item-price">{{ $price(it.price * it.qty) }}</span>
                   </li>
                 </ul>
@@ -197,22 +209,27 @@
                   <div><dt>运费</dt><dd>{{ shipping === 0 ? '免运费' : $price(shipping) }}</dd></div>
                   <div class="order-summary-total"><dt>合计</dt><dd>{{ $price(total) }}</dd></div>
                 </dl>
+                </div>
 
                 <p v-if="isDemo" class="checkout-note">
                   当前购物车为空，展示的是示例订单（测试数据）。从商品页加入购物车后，这里会显示真实清单。
                 </p>
               </section>
 
-              <!-- 右：支付面板 -->
+              <!-- 下方：整块收银台 -->
               <section class="card checkout-pay" data-aos="fade-up" data-aos-delay="140">
                 <div class="pay-head">
                   <div>
-                    <p class="pay-label">应付金额</p>
-                    <p class="pay-amount">¥{{ totalText }}</p>
+                    <p class="checkout-eyebrow">PAYMENT</p>
+                    <h2 class="checkout-h">选择支付方式</h2>
                   </div>
-                  <p class="pay-order-no">订单号 {{ orderNo }}</p>
+                  <div class="pay-amount-wrap">
+                    <p class="pay-label">应付金额 <strong class="pay-amount">¥{{ totalText }}</strong></p>
+                    <p class="pay-order-no">订单号 {{ orderNo }}</p>
+                  </div>
                 </div>
 
+                <div class="pay-body">
                 <div class="pay-methods" role="radiogroup" aria-label="支付方式">
                   <button
                     v-for="m in pay.methods"
@@ -226,15 +243,19 @@
                     @click="selectMethod(m)"
                   >
                     <span class="pay-method-icon" :style="{ background: m.color }">{{ m.icon }}</span>
-                    <span class="pay-method-name">{{ m.name }}</span>
+                    <span class="pay-method-text">
+                      <span class="pay-method-name">{{ m.name }}</span>
+                      <span class="pay-method-desc">{{ methodDesc(m) }}</span>
+                    </span>
                     <span v-if="m.recommend" class="pay-method-tag">推荐</span>
                     <span v-if="m.id === activeId" class="pay-method-check" :style="{ background: m.color }" aria-hidden="true">
                       <svg viewBox="0 0 12 12" width="10" height="10"><path d="M2 6.2 4.8 9 10 3.4" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </span>
+                    <span v-else class="pay-method-radio" aria-hidden="true"></span>
                   </button>
                 </div>
 
-                <div class="pay-qr">
+                <div class="pay-qr pay-qr-panel">
                   <p class="pay-qr-tip">{{ method.tip }}</p>
 
                   <div class="pay-qr-frame" :style="{ '--pay-color': method.color }">
@@ -249,17 +270,18 @@
                     <template v-if="!expired">支付剩余时间 <strong>{{ countdownText }}</strong></template>
                     <template v-else>二维码已失效，请刷新后重新扫码</template>
                   </p>
-                </div>
 
-                <button
-                  type="button"
-                  class="btn btn-primary btn-block pay-done-btn"
-                  :disabled="expired"
-                  @click="simulatePay"
-                >
-                  我已完成支付
-                </button>
-                <p class="pay-secure">二维码为本地生成的测试数据，不会发起真实扣款。</p>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-block pay-done-btn"
+                    :disabled="expired"
+                    @click="simulatePay"
+                  >
+                    我已完成支付
+                  </button>
+                  <p class="pay-secure">二维码为本地生成的测试数据，不会发起真实扣款。</p>
+                </div>
+                </div>
               </section>
             </div>
           </div>
