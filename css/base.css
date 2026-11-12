@@ -176,7 +176,7 @@ input, textarea, select { font-family: inherit; font-size: inherit; color: inher
 ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.3); background-clip: content-box; }
 
 /* ---------- 工具类 ---------- */
-.container { max-width: var(--container); margin: 0 auto; padding: 0 var(--space-5); width: 100%; }
+.container { max-width: var(--container); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 1.5rem); width: 100%; }
 .container-narrow { max-width: 860px; margin: 0 auto; padding: 0 var(--space-5); width: 100%; }
 
 .text-center { text-align: center; }
@@ -227,12 +227,12 @@ input, textarea, select { font-family: inherit; font-size: inherit; color: inher
 }
 
 /* ---------- 通用区块标题 ---------- */
-.section { padding: var(--space-9) var(--space-5); }
+.section { padding: clamp(3.5rem, 8vw, 6rem) clamp(1rem, 4vw, 1.5rem); }
 .section--muted { background: var(--color-bg-secondary); }
 .section--dark { background: var(--color-ink); color: var(--color-text-invert); }
 .section-inner { max-width: var(--container); margin: 0 auto; }
 
-.section-header { text-align: center; margin-bottom: var(--space-8); }
+.section-header { text-align: center; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
 .section-header h2 { margin-bottom: var(--space-3); font-weight: var(--font-weight-bold); }
 .section-header p { color: var(--color-text-secondary); font-size: var(--font-size-lg); margin: 0; }
 

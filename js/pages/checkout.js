@@ -162,9 +162,9 @@
           <div class="container checkout-container">
 
             <ol class="checkout-steps" data-aos="fade-up">
-              <li><span class="checkout-step-no">1</span>购物车</li>
-              <li class="is-current"><span class="checkout-step-no">2</span>确认订单并支付</li>
-              <li><span class="checkout-step-no">3</span>完成</li>
+              <li><span class="checkout-step-no">1</span><span class="checkout-step-text">购物车</span></li>
+              <li class="is-current"><span class="checkout-step-no">2</span><span class="checkout-step-text">确认订单并支付</span></li>
+              <li><span class="checkout-step-no">3</span><span class="checkout-step-text">完成</span></li>
             </ol>
 
             <div class="checkout-stack">
