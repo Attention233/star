@@ -686,3 +686,33 @@ body.cart-open .toast-container { right: calc(min(440px, 100vw) + var(--space-5)
   .product-footer .btn { padding: 7px 10px; min-height: 32px; }
 }
 
+
+/* ---------- 手机购物车：安全区与 Toast 避让 ---------- */
+@media (max-width: 768px) {
+  /* 全屏购物车打开时隐藏 Toast，避免盖住第一件商品 */
+  body.cart-open .toast-container { display: none; }
+
+  .cart-panel {
+    width: 100%;
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .cart-header {
+    padding: calc(var(--space-4) + env(safe-area-inset-top)) var(--space-4) var(--space-4);
+  }
+
+  .cart-items {
+    padding: var(--space-4);
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .cart-footer {
+    padding: var(--space-4) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom));
+  }
+
+  .cart-item { gap: var(--space-3); }
+  .cart-item-image { width: 72px; height: 72px; }
+}
