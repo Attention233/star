@@ -1435,3 +1435,27 @@
   }
   .checkout-page--v2 .pay-qr-frame { width: 200px; height: 200px; }
 }
+
+/* 手机结算页：参考桌面端左右分栏 */
+@media (max-width: 600px) {
+  .checkout-page--v2 .pay-body {
+    grid-template-columns: 116px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .checkout-page--v2 .pay-methods {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .checkout-page--v2 .pay-method {
+    flex-direction: column;
+    justify-content: center;
+    min-height: 64px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .checkout-page--v2 .pay-method-text { flex: 0; align-items: center; gap: 2px; }
+  .checkout-page--v2 .pay-method-icon { width: 32px; height: 32px; font-size: 14px; }
+  .checkout-page--v2 .pay-qr-panel { padding: 12px; }
+  .checkout-page--v2 .pay-qr-frame { width: 168px; height: 168px; }
+}
